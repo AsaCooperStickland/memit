@@ -35,7 +35,7 @@ def get_tfidf_vectorizer(data_dir: str):
 
     vec = MyVectorizer()
     vec.vocabulary_ = vocab
-    vec._tfidf._idf_diag = sp.spdiags(idf, diags=0, m=len(idf), n=len(idf))
+    vec.idf_._idf_diag = sp.spdiags(idf, diags=0, m=len(idf), n=len(idf))
 
     return vec
 
