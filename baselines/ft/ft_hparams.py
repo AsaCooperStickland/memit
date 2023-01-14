@@ -23,5 +23,6 @@ class FTHyperParams(HyperParams):
     lm_head_module: str
 
     # Defaults
+    bitfit: bool = False
     batch_size: int = 64
     wd_power_law: tuple = None  # Scale weight decay by number of edits

@@ -68,12 +68,20 @@ def execute_ft(
         )
 
     # Retrieve weights that user desires to change
-    weights = {
-        n: p
-        for n, p in model.named_parameters()
-        for layer in hparams.layers
-        if hparams.rewrite_module_tmp.format(layer) in n
-    }
+    if hparams.bitfit:
+        weights = {
+            n: p
+            for n, p in model.named_parameters()
+            for layer in hparams.layers
+            if "bias" in n
+        }
+    else:
+        weights = {
+            n: p
+            for n, p in model.named_parameters()
+            for layer in hparams.layers
+            if hparams.rewrite_module_tmp.format(layer) in n
+        }
     # Save old weights for future restoration
     weights_copy = {k: v.detach().clone() for k, v in weights.items()}
     print(f"Weights to be updated: {list(weights.keys())}")
