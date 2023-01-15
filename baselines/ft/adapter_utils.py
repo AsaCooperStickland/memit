@@ -100,7 +100,7 @@ def lorafy_(model, config):
         for name, child in module.named_children():
             if isinstance(child, nn.Linear) and name in config.layer_list.split(","):
                 for layer in config.layers:
-                    if config.rewrite_module_tmp.format(layer) in name:
+                    if config.layer_module_tmp.format(layer) in name:
                         print(name, child)
                         setattr(module, name, LoraLinear.from_linear(
                             child, adapter_dim=config.adapter_size))
