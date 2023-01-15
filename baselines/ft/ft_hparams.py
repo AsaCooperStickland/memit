@@ -25,6 +25,6 @@ class FTHyperParams(HyperParams):
     # Defaults
     bitfit: bool = False
     adapter_size: int = -1
-    layer_list: str = "q,fc_in"
+    layer_list: str = "q_proj,fc_in"
     batch_size: int = 64
     wd_power_law: tuple = None  # Scale weight decay by number of edits

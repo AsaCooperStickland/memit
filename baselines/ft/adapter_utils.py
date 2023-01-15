@@ -96,14 +96,18 @@ class LoraLinear(nn.Module):
 
 
 def lorafy_(model, config):
+    layer_count = 0
     for module in list(model.modules()):
         for name, child in module.named_children():
-            if isinstance(child, nn.Linear) and name in config.layer_list.split(","):
-                for layer in config.layers:
-                    if config.layer_module_tmp.format(layer) in name:
-                        print(name, child)
-                        setattr(module, name, LoraLinear.from_linear(
-                            child, adapter_dim=config.adapter_size))
-                        # parallel=config.parallel, batchensemble=config.batchensemble,
-                        # adapter_bias=config.lora_bias, down_scale=config.down_scale,
-                        # up_scale=config.up_scale, init_svd=False))
+            if name == "dropout":
+                layer_count += 1
+            if layer_count in config.layers:
+                if isinstance(child, nn.Linear) and name in config.layer_list.split(","):
+                    # for layer in config.layers:
+                    #     if config.layer_module_tmp.format(layer) in name:
+                    print(name, child)
+                    setattr(module, name, LoraLinear.from_linear(
+                        child, adapter_dim=config.adapter_size))
+                # parallel=config.parallel, batchensemble=config.batchensemble,
+                # adapter_bias=config.lora_bias, down_scale=config.down_scale,
+                # up_scale=config.up_scale, init_svd=False))
