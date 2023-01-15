@@ -77,7 +77,7 @@ def execute_ft(
             if (hparams.rewrite_module_tmp.format(layer) in n and "bias" in n)
         }
     elif hparams.adapter_size > -1:
-        lorafy_(model)
+        lorafy_(model, hparams)
         weights = {
             n: p
             for n, p in model.named_parameters()
