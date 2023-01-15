@@ -1,0 +1,18 @@
+{
+    "layers": [
+        27, 26, 25, 24, 23, 22, 
+        21, 20, 19, 18, 17, 16, 15, 14
+    ],
+    "num_steps": 25,
+    "lr": 5e-4,
+    "weight_decay": 0,
+    "kl_factor": 0,
+    "norm_constraint": false,
+    "adapter_size": 128,
+    "rewrite_module_tmp": "transformer.h.{}.mlp.fc_out",
+    "layer_module_tmp": "transformer.h.{}",
+    "mlp_module_tmp": "transformer.h.{}.mlp",
+    "attn_module_tmp": "transformer.h.{}.attn",
+    "ln_f_module": "transformer.ln_f",
+    "lm_head_module": "lm_head"
+}
