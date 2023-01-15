@@ -73,7 +73,7 @@ def execute_ft(
             n: p
             for n, p in model.named_parameters()
             for layer in hparams.layers
-            if "bias" in n
+            if (hparams.rewrite_module_tmp.format(layer) in n and "bias" in n)
         }
     else:
         weights = {
@@ -115,7 +115,8 @@ def execute_ft(
         loss_meter.reset()
 
         for txt, tgt in zip(
-            chunks(texts, hparams.batch_size), chunks(targets, hparams.batch_size)
+            chunks(texts, hparams.batch_size), chunks(
+                targets, hparams.batch_size)
         ):
             inputs = tok(txt, return_tensors="pt", padding=True).to("cuda")
             target_ids = tok(tgt, return_tensors="pt", padding=True)["input_ids"].to(
@@ -127,7 +128,8 @@ def execute_ft(
             opt.zero_grad()
             bs = inputs["input_ids"].shape[0]
             probs = torch.nn.functional.log_softmax(
-                model(**inputs).logits[torch.arange(bs), last_token_inds], dim=-1
+                model(**inputs).logits[torch.arange(bs),
+                                       last_token_inds], dim=-1
             )
             loss = -(torch.gather(probs, 1, target_ids) * loss_mask).sum(
                 1
