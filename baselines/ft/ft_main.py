@@ -7,6 +7,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from util import nethook
 
 from .ft_hparams import FTHyperParams
+from .adapter_utils import lorafy_
 
 
 def apply_ft_to_model(
@@ -74,6 +75,14 @@ def execute_ft(
             for n, p in model.named_parameters()
             for layer in hparams.layers
             if (hparams.rewrite_module_tmp.format(layer) in n and "bias" in n)
+        }
+    elif hparams.adapter_size > -1:
+        lorafy_(model)
+        weights = {
+            n: p
+            for n, p in model.named_parameters()
+            for layer in hparams.layers
+            if (hparams.rewrite_module_tmp.format(layer) in n and "adapter" in n)
         }
     else:
         weights = {
